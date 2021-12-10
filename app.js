@@ -127,10 +127,39 @@ function teamQuestions() {
   }
 
   // write function to add Intern
-
+  function addIntern() {
+    inquirer.prompt([
+      {
+        type: 'input',
+        name: 'internName',
+        message: 'What is the intern name?'
+      },
+      {
+        type: 'input',
+        name: 'internId',
+        message: 'What is the intern ID?'
+      },
+      {
+        type: 'input',
+        name: 'internEmail',
+        message: 'What is the intern email?'
+      },
+      {
+        type: 'input',
+        name: 'internGithub',
+        message: 'What is the intern GitHub?'
+      }
+    ])
+      .then(answers => {
+        const engineer = new Intern(answers.internName, answers.internId, answers.internEmail, answers.internGithub);
+        employeesArray.push(intern)
+        console.log(employeesArray)
+        otherMembers();
+      })
+  }
 
   // Write Function to Build HTML File
-  
+
 
   createManager();
 }
