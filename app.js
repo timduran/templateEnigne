@@ -9,6 +9,7 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
+const { validate } = require("jest-validate");
 // Arrays to push all employees to after they have been prompted by the user
 const employeesArray = [];
 const idArray = [];
@@ -43,7 +44,13 @@ function teamQuestions() {
       {
         type: 'input',
         name: 'managerName',
-        message: 'What is the manager name?'
+        message: 'What is the manager name?',
+        validate: answer => {
+          if(answer !== "") {
+            return true
+          }
+          return "Please enter at least one character"
+        }
       },
       {
         type: 'input',
@@ -151,7 +158,7 @@ function teamQuestions() {
       }
     ])
       .then(answers => {
-        const engineer = new Intern(answers.internName, answers.internId, answers.internEmail, answers.internGithub);
+        const intern = new Intern(answers.internName, answers.internId, answers.internEmail, answers.internGithub);
         employeesArray.push(intern)
         console.log(employeesArray)
         otherMembers();
@@ -159,9 +166,15 @@ function teamQuestions() {
   }
 
   // Write Function to Build HTML File
-
+    function buildHtml() {
+      if(!fs.existsSync(OUTPUT_DIR)) {
+        fs.mkdirSync(OUTPUT_DIR)
+      }
+      fs.writeFileSync(outputPath, render(employeesArray), 'utf-8')
+    }
 
   createManager();
 }
 
 teamQuestions();
+
